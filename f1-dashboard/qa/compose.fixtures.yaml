@@ -1,7 +1,0 @@
-# Test-only provider fixtures. Production Compose files do not mount source.
-services:
-  gridline:
-    entrypoint: [node, qa/container-fixture.mjs]
-    command: []
-    volumes:
-      - ./qa:/app/qa:ro

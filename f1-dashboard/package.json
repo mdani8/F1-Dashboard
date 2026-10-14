@@ -4,17 +4,60 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "npm run build && node server.mjs",
-    "build": "vite build",
-    "test": "node --test",
-    "test:browser": "npm run build && node qa/browser.mjs",
-    "test:animations": "npm run build && node qa/animations.mjs",
-    "test:qol": "npm run build && node qa/qol.mjs",
-    "test:rss": "npm run build && node qa/feeds.mjs",
-    "test:docker": "node qa/docker.mjs",
-    "test:providers": "node qa/live.mjs"
+    "start": "npm run build && node build/server/index.js",
+    "build": "npm run build:server && npm run build:client",
+    "test": "tsx scripts/run-tests.ts",
+    "test:browser": "npm run build && tsx tests/e2e/navigation.ts",
+    "test:animations": "npm run build && tsx tests/e2e/animations.ts",
+    "test:qol": "npm run build && tsx tests/e2e/preferences.ts",
+    "test:rss": "npm run build && tsx tests/e2e/feeds.ts",
+    "test:docker": "tsx tests/integration/docker.ts",
+    "test:providers": "tsx tests/smoke/providers.ts",
+    "build:server": "tsc -p tsconfig.server.json",
+    "build:client": "vite build",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.client.json",
+    "lint": "eslint . --max-warnings=0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check:unused": "knip",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm run check:unused && npm test",
+    "test:e2e": "npm run build && tsx scripts/run-browser-tests.ts",
+    "test:preview": "tsx tests/smoke/application.ts",
+    "test:qol-live": "tsx tests/smoke/features.ts",
+    "test:rss-live": "tsx tests/smoke/rss.ts",
+    "build:fixtures": "tsx scripts/build-fixtures.ts"
   },
-  "engines": { "node": "^20.19.0 || >=22.12.0" },
-  "dependencies": { "react": "19.3.0", "react-dom": "19.3.0", "motion": "14.2.0" },
-  "devDependencies": { "vite": "8.3.4", "@vitejs/plugin-react": "6.1.2" }
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "dependencies": {
+    "motion": "14.2.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "eslint": "9.39.5",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.13.0",
+    "knip": "6.41.0",
+    "playwright": "1.64.1",
+    "prettier": "3.9.10",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.2",
+    "vite": "8.3.4"
+  },
+  "imports": {
+    "#server/*": {
+      "types": "./src/server/*.ts",
+      "default": "./build/server/*.js"
+    }
+  }
 }

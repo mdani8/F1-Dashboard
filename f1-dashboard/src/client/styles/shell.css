@@ -1,0 +1,242 @@
+.topbar {
+  max-width: 1440px;
+  margin: auto;
+  padding: 26px 44px;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 25px;
+  font-family: var(--display);
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+.brand-mark {
+  color: var(--red);
+  font-size: 35px;
+  letter-spacing: -6px;
+  margin-right: 8px;
+}
+.brand-sub {
+  font: 600 10px var(--font);
+  letter-spacing: 1.6px;
+  border-left: 1px solid var(--line);
+  padding-left: 14px;
+  color: var(--muted);
+}
+nav {
+  display: flex;
+  gap: 28px;
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--muted);
+}
+.refresh {
+  border: 1px solid #42454e;
+  background: transparent;
+  border-radius: 5px;
+  color: var(--text);
+  padding: 9px 14px;
+  font-size: 13px;
+}
+.refresh span {
+  font-size: 20px;
+  vertical-align: -2px;
+  margin-right: 5px;
+}
+main {
+  max-width: 1440px;
+  margin: auto;
+  padding: 40px 44px 60px;
+}
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+.red-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  margin-right: 7px;
+}
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+h1 {
+  font-family: var(--display);
+  font-size: clamp(32px, 3.5vw, 47px);
+  letter-spacing: 0.1px;
+  line-height: 1.05;
+  margin-bottom: 0;
+}
+h2 {
+  font-family: var(--display);
+  font-size: 27px;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+.season-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  border: 1px solid var(--line);
+  padding: 10px 14px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.section-heading .eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.6px;
+  margin-bottom: 9px;
+}
+footer {
+  max-width: 1440px;
+  margin: auto;
+  padding: 24px 44px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  color: #999eaa;
+  font-size: 10px;
+  line-height: 1.8;
+}
+.footer-brand {
+  letter-spacing: 0.3px;
+}
+.footer-brand span {
+  color: var(--red);
+  margin: 0 6px;
+}
+footer a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (min-width: 1500px) {
+  main {
+    padding-top: 48px;
+  }
+}
+@media (max-width: 1050px) {
+  .topbar,
+  main,
+  footer {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .brand-sub {
+    display: none;
+  }
+}
+@media (max-width: 780px) {
+  .topbar {
+    gap: 16px;
+  }
+  .brand {
+    font-size: 21px;
+  }
+  nav {
+    gap: 15px;
+    font-size: 11px;
+  }
+  .page-heading {
+    gap: 15px;
+  }
+  footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+@media (max-width: 480px) {
+  .topbar {
+    padding: 18px 16px;
+    flex-wrap: wrap;
+  }
+  .topbar nav {
+    order: 3;
+    width: 100%;
+    margin: 0;
+    padding-top: 5px;
+  }
+  .refresh {
+    margin-left: auto;
+  }
+  main {
+    padding: 28px 16px 40px;
+  }
+  .page-heading {
+    align-items: flex-start;
+  }
+  h1 {
+    font-size: 34px;
+    max-width: 220px;
+  }
+  .season-pill {
+    font-size: 9px;
+    padding: 8px;
+  }
+  footer {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+.quiet-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #9197a3;
+  border-radius: 50%;
+  margin-right: 7px;
+}
+.footer-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 9px;
+  min-width: 0;
+}
+.rss-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin: 0;
+  font-size: 10px;
+}
+.rss-links > span {
+  color: #edc17b;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.rss-links a {
+  color: #b7bfcc;
+}
+.rss-links a:hover {
+  color: var(--red);
+}
+@media (max-width: 680px) {
+  .footer-details {
+    align-items: flex-start;
+  }
+  .rss-links {
+    font-size: 10px;
+  }
+}

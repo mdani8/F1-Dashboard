@@ -1,0 +1,285 @@
+.circuit-panel {
+  margin: 0 0 26px;
+  background: linear-gradient(125deg, #191c22, #17191e);
+}
+.circuit-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px 0;
+}
+.circuit-heading h2 {
+  font-size: 25px;
+}
+.circuit-heading .eyebrow {
+  font-size: 9px;
+  margin-bottom: 8px;
+}
+.map-refresh {
+  flex-shrink: 0;
+  border: 1px solid #414650;
+  border-radius: 4px;
+  padding: 7px 10px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 10px;
+}
+.map-refresh:hover {
+  color: var(--text);
+  border-color: #777d89;
+}
+.circuit-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(230px, 1fr);
+  align-items: center;
+  gap: 16px;
+  padding: 8px 24px 15px;
+}
+.circuit-diagram {
+  min-width: 0;
+}
+.circuit-diagram svg {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  overflow: visible;
+}
+.circuit-outline,
+.circuit-sector {
+  fill: none;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.circuit-outline {
+  stroke: #101216;
+  stroke-width: 13;
+}
+.circuit-sector {
+  stroke-width: 6;
+  cursor: pointer;
+}
+.circuit-sector:hover {
+  stroke-width: 8;
+}
+.circuit-label {
+  pointer-events: none;
+}
+.circuit-label line {
+  stroke: currentColor;
+  stroke-width: 1;
+  opacity: 0.55;
+}
+.circuit-label text {
+  fill: currentColor;
+  font: 700 18px var(--font);
+  paint-order: stroke;
+  stroke: #181b21;
+  stroke-width: 7;
+  stroke-linejoin: round;
+}
+.sector-boundary {
+  fill: #f5f5f7;
+  stroke: #17191e;
+  stroke-width: 2;
+}
+.start-finish {
+  stroke: #fff;
+  stroke-width: 1;
+}
+.track-direction {
+  fill: none;
+  stroke: white;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.circuit-caption {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 9px;
+  margin: 0 0 6px;
+}
+.circuit-caption > span:not(.finish-key) {
+  margin: 0 3px;
+  color: #646b79;
+}
+.finish-key {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: conic-gradient(#fff 25%, #111317 0 50%, #fff 0 75%, #111317 0);
+  background-size: 6px 6px;
+  border: 1px solid #aaa;
+}
+.map-circuit-name {
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0 0 8px;
+}
+.map-instructions {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 0 0 13px;
+  line-height: 1.6;
+}
+.sector-controls {
+  display: grid;
+  gap: 6px;
+}
+.sector-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid #353a44;
+  border-radius: 4px;
+  padding: 10px 12px;
+  background: #ffffff02;
+  color: var(--text);
+  text-align: left;
+  font-size: 11px;
+}
+.sector-control i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sector-color);
+  margin-right: 7px;
+}
+.sector-control strong {
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--sector-color);
+}
+.sector-control:hover,
+.sector-control[aria-pressed='true'] {
+  background: #ffffff07;
+  border-color: var(--sector-color);
+}
+.map-reference {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin: 15px 0 0;
+}
+.map-reference strong {
+  font-weight: 500;
+  color: #d5d9e2;
+}
+.map-reference-note {
+  font-size: 10px;
+  line-height: 1.7;
+  color: #e5c17e;
+  margin: 8px 0 0;
+}
+.map-source {
+  font-size: 9px;
+  color: #9299a7;
+  line-height: 1.7;
+  margin: 8px 0 0;
+}
+.map-footnote {
+  color: #9299a7;
+  font-size: 9px;
+  line-height: 1.7;
+  margin: 0;
+  padding: 0 24px 18px;
+}
+.map-placeholder {
+  display: flex;
+  min-height: 240px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 24px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.map-placeholder > span {
+  font-size: 48px;
+  color: #687280;
+}
+.map-placeholder p {
+  margin: 0;
+  line-height: 1.7;
+}
+.map-placeholder .retry {
+  margin: 0;
+}
+.north-arrow path {
+  fill: none;
+  stroke: #c7cfdd;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.north-arrow text {
+  fill: #c7cfdd;
+  font: 600 16px var(--font);
+}
+.map-source a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+@media (max-width: 780px) {
+  .circuit-heading {
+    padding: 20px 18px 0;
+  }
+  .circuit-layout {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 0 18px 18px;
+  }
+  .circuit-diagram svg {
+    max-height: 275px;
+  }
+  .circuit-details {
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+  }
+  .sector-controls {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+  .sector-control {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 11px 8px;
+  }
+  .map-footnote {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .circuit-caption {
+    font-size: 8px;
+    margin-bottom: 8px;
+  }
+  .map-circuit-name {
+    font-size: 13px;
+  }
+}
+@media (max-width: 480px) {
+  .circuit-heading h2 {
+    font-size: 22px;
+  }
+  .map-refresh {
+    font-size: 9px;
+    padding: 7px 8px;
+  }
+  .sector-control {
+    font-size: 10px;
+  }
+  .sector-control strong {
+    font-size: 11px;
+  }
+}

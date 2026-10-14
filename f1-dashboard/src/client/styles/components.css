@@ -1,0 +1,352 @@
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.section-heading {
+  padding: 25px 24px 22px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.section-number {
+  color: #41444c;
+  font-family: var(--display);
+  font-size: 32px;
+}
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--line);
+  padding: 0 24px;
+  gap: 28px;
+}
+.tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 0 2px 13px;
+  font-size: 13px;
+}
+.tabs button[aria-selected='true'] {
+  color: var(--text);
+  border-bottom-color: var(--red);
+}
+.data-note {
+  font-size: 11px;
+  color: var(--muted);
+  padding: 16px 24px 7px;
+  line-height: 1.6;
+  margin: 0;
+}
+.data-note strong {
+  color: #ddd;
+  font-weight: 500;
+}
+.table-wrap {
+  overflow-x: auto;
+  padding: 0 12px 12px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  white-space: nowrap;
+}
+th {
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 1.1px;
+  font-weight: 600;
+  padding: 14px 10px;
+  text-align: left;
+}
+td {
+  padding: 15px 10px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+th:first-child,
+td:first-child {
+  width: 45px;
+  text-align: center;
+}
+th:nth-last-child(-n + 2),
+td:nth-last-child(-n + 2) {
+  text-align: right;
+}
+.position {
+  font: 600 22px var(--display);
+  color: var(--muted);
+}
+tr:first-child .position {
+  color: var(--red);
+}
+.entrant {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.team-stripe {
+  width: 3px;
+  height: 29px;
+  border-radius: 2px;
+  background: var(--team-color, #aaa);
+  flex-shrink: 0;
+}
+.entrant-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+.entrant-team {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.points {
+  font: 700 21px var(--display);
+}
+.wins {
+  color: var(--muted);
+}
+.message,
+.loading {
+  padding: 24px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 13px;
+  margin: 0;
+}
+.notice {
+  color: #efc48b;
+  background: #efc48b08;
+  padding: 10px 24px;
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 0;
+}
+.retry {
+  border: 1px solid #565963;
+  background: transparent;
+  color: var(--text);
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin-left: 8px;
+  font-size: 11px;
+}
+@media (max-width: 1050px) {
+  .section-heading {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .section-heading h2 {
+    font-size: 24px;
+  }
+}
+@media (max-width: 480px) {
+  .data-note {
+    padding-left: 18px;
+  }
+  .entrant-name {
+    font-size: 13px;
+  }
+  .entrant {
+    gap: 8px;
+  }
+  td {
+    padding: 13px 7px;
+  }
+  th {
+    padding: 14px 7px;
+  }
+}
+.session-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 19px 0 12px;
+}
+.session-heading h2 {
+  font-size: 30px;
+}
+.session-heading > span {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.points-note {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 0 0 20px;
+}
+.source-note {
+  margin: 0;
+  padding: 0 24px 16px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+.session-table {
+  min-width: 620px;
+}
+.session-table th,
+.session-table td {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.session-table th:last-child,
+.session-table td:last-child {
+  padding-right: 20px;
+}
+.session-table td {
+  font-variant-numeric: tabular-nums;
+}
+.selected-driver {
+  background: #ff453a07;
+}
+.pending-points {
+  font: 400 10px var(--font);
+  color: var(--muted);
+}
+.panel-footnote {
+  font-size: 10px;
+  color: var(--muted);
+  padding: 0 24px 19px;
+  line-height: 1.7;
+  margin: 0;
+}
+.text-link {
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.table-hint {
+  display: none;
+  padding: 0 18px 14px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+}
+@media (max-width: 780px) {
+  .table-hint {
+    display: block;
+  }
+  .session-heading {
+    align-items: flex-start;
+  }
+  .session-heading > span {
+    text-align: right;
+    max-width: 180px;
+  }
+}
+@media (max-width: 480px) {
+  .session-heading h2 {
+    font-size: 26px;
+  }
+  .session-heading > span {
+    font-size: 10px;
+    max-width: 160px;
+  }
+  .session-table th,
+  .session-table td {
+    padding-left: 11px;
+    padding-right: 11px;
+  }
+}
+
+a,
+button {
+  transition:
+    color 0.12s ease-out,
+    background-color 0.12s ease-out,
+    border-color 0.12s ease-out;
+}
+button[aria-disabled='true'] {
+  cursor: wait;
+  opacity: 0.65;
+}
+.tabs button[aria-selected='true'] {
+  border-bottom-color: transparent;
+}
+[inert] {
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  a,
+  button {
+    transition: none;
+  }
+}
+.picker-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  max-width: 100%;
+}
+.picker-field select {
+  min-width: 0;
+}
+.table-wrap {
+  max-height: min(70vh, 720px);
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #4b505c #181a1f;
+  overscroll-behavior-x: contain;
+}
+.table-wrap thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface);
+  box-shadow: 0 1px 0 var(--line);
+}
+.entrant-details {
+  min-width: 0;
+}
+.entrant-primary,
+.entrant-secondary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.entrant-secondary .entrant-team {
+  margin-top: 0;
+}
+.fastest-summary {
+  color: #c4a3ff;
+}
+.fastest-lap {
+  background: #b383ff08;
+}
+.fastest-lap td:nth-child(2) {
+  color: #c4a3ff;
+}
+.fastest-tag {
+  display: inline-block;
+  margin-left: 9px;
+  border: 1px solid #b383ff50;
+  border-radius: 3px;
+  padding: 3px 5px;
+  font-size: 8px;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  color: #c4a3ff;
+  vertical-align: 1px;
+}
+@media (max-width: 480px) {
+  .entrant-primary,
+  .entrant-secondary {
+    gap: 4px;
+  }
+  .fastest-tag {
+    display: block;
+    width: fit-content;
+    margin: 4px 0 0;
+  }
+}

@@ -1,0 +1,22 @@
+.refresh-icon {
+  display: inline-block;
+  transform-origin: center;
+}
+.tab-underline {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--red);
+  pointer-events: none;
+}
+.tab-label {
+  position: relative;
+  z-index: 1;
+}
+.tab-label small {
+  display: block;
+  font-size: 9px;
+  margin-top: 5px;
+}

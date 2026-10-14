@@ -1,0 +1,8 @@
+node_modules/
+dist/
+build/
+build-fixtures/
+artifacts/
+package-lock.json
+data/
+.gridline-data/

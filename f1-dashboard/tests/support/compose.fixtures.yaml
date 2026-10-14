@@ -1,0 +1,7 @@
+services:
+  gridline:
+    build:
+      target: verification
+    image: gridline:verification
+    entrypoint: [node, build-fixtures/support/container-fixture.js]
+    command: []

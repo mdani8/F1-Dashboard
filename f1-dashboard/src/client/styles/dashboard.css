@@ -1,0 +1,289 @@
+.race-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #51302f;
+  border-left: 4px solid var(--red);
+  border-radius: 8px;
+  min-height: 228px;
+  padding: 29px 32px;
+  background: linear-gradient(115deg, #211b1e 0%, #1a1b20 60%, #32201f 100%);
+}
+#next-race {
+  position: relative;
+  z-index: 1;
+  max-width: 85%;
+}
+.race-hero .eyebrow {
+  color: #ff827a;
+}
+.race-hero h2 {
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 700;
+  margin-bottom: 9px;
+  line-height: 1.05;
+}
+.race-location {
+  color: #c4c3c9;
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+.race-location span {
+  margin: 0 8px;
+  color: #6d6266;
+}
+.next-session {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.session-label {
+  background: #ff453a20;
+  border: 1px solid #ff453a50;
+  color: #ff9e98;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 6px 9px;
+  border-radius: 3px;
+}
+.hero-decoration {
+  position: absolute;
+  right: 32px;
+  top: 35px;
+  font: 800 italic 135px var(--display);
+  color: #ffffff05;
+  line-height: 1;
+}
+.hero-decoration span {
+  display: block;
+  font: 600 10px var(--font);
+  letter-spacing: 5px;
+  color: #ffffff16;
+  text-align: center;
+}
+.timezone {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+  margin: 12px 0 29px;
+}
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 26px;
+  align-items: start;
+}
+.calendar-key {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 10px;
+  padding: 0 24px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.calendar-key span:first-child {
+  white-space: nowrap;
+}
+.calendar-list {
+  padding: 0 12px 12px;
+}
+.race-row {
+  border-top: 1px solid var(--line);
+}
+.race-row:first-child {
+  border-top: 0;
+}
+.race-round {
+  font: 500 18px var(--display);
+  color: #7d828e;
+  width: 24px;
+  flex-shrink: 0;
+}
+.race-date {
+  width: 38px;
+  flex-shrink: 0;
+  text-align: center;
+  font: 600 23px var(--display);
+  line-height: 1;
+}
+.race-date span {
+  display: block;
+  font: 500 9px var(--font);
+  letter-spacing: 1px;
+  margin-top: 5px;
+  color: var(--muted);
+}
+.race-info {
+  min-width: 0;
+  flex: 1;
+}
+.race-info h3 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 5px;
+}
+.race-info p {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+.race-status {
+  font-size: 8px;
+  letter-spacing: 0.7px;
+  color: #9398a4;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.race-row.upcoming .race-status {
+  color: #ff8c85;
+}
+.race-row.next {
+  background: #ff453a08;
+  border-radius: 4px;
+}
+.race-row.next .race-status {
+  color: #ffa19a;
+}
+.chevron {
+  color: #8d919c;
+  transition: transform 0.15s;
+  font-size: 16px;
+}
+.sessions {
+  margin: 0 12px 17px 75px;
+  list-style: none;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.sessions li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 0;
+  font-size: 11px;
+  border-bottom: 1px solid #ffffff06;
+}
+.sessions li span:last-child {
+  color: var(--muted);
+  text-align: right;
+}
+.sessions .race-session {
+  color: #ff8c85;
+}
+@media (max-width: 1050px) {
+  .dashboard-grid {
+    gap: 18px;
+  }
+  .race-status {
+    display: none;
+  }
+}
+@media (max-width: 780px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-decoration {
+    right: 10px;
+    font-size: 100px;
+  }
+  .race-hero {
+    min-height: 210px;
+    padding: 25px;
+  }
+}
+@media (max-width: 480px) {
+  .race-hero {
+    padding: 22px 18px;
+  }
+  #next-race {
+    max-width: 100%;
+  }
+  .race-location {
+    line-height: 1.7;
+  }
+  .timezone {
+    text-align: left;
+    font-size: 10px;
+  }
+  .calendar-key {
+    padding: 0 18px 14px;
+  }
+  .calendar-key span:last-child {
+    max-width: 170px;
+    text-align: right;
+  }
+  .sessions {
+    margin-left: 14px;
+  }
+  .race-status {
+    display: block;
+    font-size: 7px;
+  }
+}
+
+.race-row-heading {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+}
+.race-open {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  flex: 1;
+  min-width: 0;
+  padding: 13px 5px;
+  color: var(--text);
+}
+.race-open:hover .race-info h3 {
+  color: var(--red);
+}
+.schedule-toggle {
+  flex-shrink: 0;
+  width: 32px;
+  height: 38px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text);
+}
+.schedule-toggle:hover {
+  border-color: #484c56;
+  background: #ffffff05;
+}
+.race-row.is-open .chevron {
+  display: inline-block;
+  transform: rotate(90deg);
+}
+.sessions a {
+  line-height: 1.5;
+}
+.sessions a span {
+  color: var(--muted);
+  margin-left: 4px;
+}
+@media (max-width: 1050px) {
+  .race-open {
+    gap: 10px;
+  }
+}
+@media (max-width: 780px) {
+  .race-open .race-status {
+    display: none;
+  }
+}
+.schedule-reveal {
+  overflow: hidden;
+}
+.chevron {
+  display: inline-block;
+  transition: none;
+}
+.race-row.is-open .chevron {
+  transform: none;
+}

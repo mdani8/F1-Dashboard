@@ -1,0 +1,43 @@
+.favourite-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: none;
+  color: #767d89;
+  font-size: 17px;
+  line-height: 1;
+}
+.favourite-toggle:hover {
+  color: #edc17b;
+  background: #edc17b0a;
+}
+.favourite-toggle[aria-pressed='true'] {
+  color: #f3c77f;
+}
+.entrant-secondary .favourite-toggle {
+  width: 21px;
+  height: 21px;
+  font-size: 13px;
+}
+.favourite-row {
+  background: #edc17b08;
+  box-shadow: inset 2px 0 #edc17b85;
+}
+.favourite-entrant .entrant-name {
+  color: #efc48b;
+}
+.favourite-row.selected-driver {
+  background: #ff453a0d;
+}
+@media (max-width: 480px) {
+  .favourite-toggle {
+    width: 23px;
+    height: 23px;
+  }
+}

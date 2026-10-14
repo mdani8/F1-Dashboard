@@ -1,0 +1,14 @@
+{
+  "$schema": "https://unpkg.com/knip/schema.json",
+  "entry": [
+    "src/server/index.ts!",
+    "src/server/cli/*.ts!",
+    "tests/{unit,integration}/*.test.ts",
+    "tests/e2e/*.ts",
+    "tests/smoke/*.ts",
+    "tests/support/container-fixture.ts",
+    "scripts/*.ts"
+  ],
+  "project": ["src/**/*.{ts,tsx}!", "tests/**/*.ts", "scripts/*.ts", "*.config.{ts,mjs}"],
+  "paths": { "#server/*": ["./src/server/*"] }
+}
