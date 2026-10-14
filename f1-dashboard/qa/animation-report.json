@@ -1,0 +1,14 @@
+{
+  "fixtureBased": true,
+  "checks": [
+    "interrupted disclosure settles correctly and closing moves focus out of inert content",
+    "tire color bars reveal on first visibility while labels retain fixed geometry",
+    "rapid session changes settle on the latest tab; dashboard tab and schedules survive navigation",
+    "unchanged refresh retains mounted tables and tire bars without entrances or timestamp highlights",
+    "published points, time and status update immediately, highlight briefly and preserve DOM, focus and scroll",
+    "driver changes during loading ignore old requests, retain session content and support visible mobile keyboard tabs",
+    "reduced motion uses immediate disclosure/tire geometry, no page translation and no busy rotation"
+  ],
+  "runtimeErrors": [],
+  "recording": "qa/animations.webm"
+}

@@ -1,0 +1,18 @@
+{
+  "fixtureBased": true,
+  "checks": [
+    "dashboard standings and separate keyboard schedule toggle",
+    "track map shows three sectors, supports keyboard highlighting and stays mounted across session/driver changes",
+    "weekend and session navigation, qualifying phases, driver laps, direct reload and browser history",
+    "mobile dashboard and weekend pages without page overflow",
+    "automatic transition from awaiting publication to results",
+    "focus and horizontal/vertical scroll preserved on refresh",
+    "polling pauses in hidden tabs and refreshes on return",
+    "independent stale pit data while classification and tires remain fresh",
+    "map refresh failure retains the reference geometry without affecting classification",
+    "navigation ignores a late response from the previous session",
+    "scheduled and invalid routes, API validation and no browser runtime errors"
+  ],
+  "upstreamRequests": 45,
+  "runtimeErrors": []
+}

@@ -1,0 +1,13 @@
+{
+  "fixtureBased": true,
+  "checks": [
+    "countdown updates locally without a provider request",
+    "driver and team favourites survive reload and highlight standings, results, pits and tires",
+    "calendar download contains every weekend session with UTC starts and stable identifiers",
+    "sticky session tabs retain scroll and keyboard focus through a delayed session load",
+    "table headers remain visible during vertical table scrolling and keyboard scrolling works",
+    "lap filters distinguish clean/pit/out records, retain selection across drivers and mark tied fastest clean laps",
+    "mobile controls fit the viewport and keyboard session switching keeps scroll and the selected tab visible"
+  ],
+  "runtimeErrors": []
+}

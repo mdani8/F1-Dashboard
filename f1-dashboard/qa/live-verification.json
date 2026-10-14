@@ -1,0 +1,136 @@
+{
+  "checkedAt": "2026-10-14T13:48:40.090Z",
+  "sessions": [
+    {
+      "season": "2026",
+      "round": "1",
+      "weekend": "Australian Grand Prix",
+      "session": "race",
+      "sessionKey": 11234,
+      "results": {
+        "status": "available",
+        "rows": 22,
+        "source": "Jolpica F1"
+      },
+      "pits": {
+        "status": "available",
+        "rows": 36
+      },
+      "tires": {
+        "status": "available",
+        "rows": 53
+      },
+      "unmatchedDrivers": 0,
+      "laps": {
+        "driver": 63,
+        "status": "available",
+        "rows": 57
+      }
+    },
+    {
+      "season": "2026",
+      "round": "1",
+      "weekend": "Australian Grand Prix",
+      "session": "practice-1",
+      "sessionKey": 11227,
+      "results": {
+        "status": "available",
+        "rows": 21,
+        "source": "OpenF1"
+      },
+      "pits": {
+        "status": "available",
+        "rows": 84
+      },
+      "tires": {
+        "status": "available",
+        "rows": 83
+      },
+      "unmatchedDrivers": 0
+    },
+    {
+      "season": "2026",
+      "round": "1",
+      "weekend": "Australian Grand Prix",
+      "session": "qualifying",
+      "sessionKey": 11230,
+      "results": {
+        "status": "available",
+        "rows": 19,
+        "source": "Jolpica F1"
+      },
+      "pits": {
+        "status": "available",
+        "rows": 99
+      },
+      "tires": {
+        "status": "available",
+        "rows": 99
+      },
+      "unmatchedDrivers": 0
+    },
+    {
+      "season": "2026",
+      "round": "2",
+      "weekend": "Chinese Grand Prix",
+      "session": "practice-1",
+      "sessionKey": 11235,
+      "results": {
+        "status": "available",
+        "rows": 22,
+        "source": "OpenF1"
+      },
+      "pits": {
+        "status": "available",
+        "rows": 80
+      },
+      "tires": {
+        "status": "available",
+        "rows": 37
+      },
+      "unmatchedDrivers": 0
+    },
+    {
+      "season": "2026",
+      "round": "2",
+      "weekend": "Chinese Grand Prix",
+      "session": "sprint-qualifying",
+      "sessionKey": 11236,
+      "results": {
+        "status": "available",
+        "rows": 21,
+        "source": "OpenF1"
+      },
+      "pits": {
+        "status": "available",
+        "rows": 48
+      },
+      "tires": {
+        "status": "available",
+        "rows": 24
+      },
+      "unmatchedDrivers": 0
+    },
+    {
+      "season": "2026",
+      "round": "2",
+      "weekend": "Chinese Grand Prix",
+      "session": "sprint",
+      "sessionKey": 11240,
+      "results": {
+        "status": "available",
+        "rows": 22,
+        "source": "Jolpica F1"
+      },
+      "pits": {
+        "status": "available",
+        "rows": 12
+      },
+      "tires": {
+        "status": "available",
+        "rows": 22
+      },
+      "unmatchedDrivers": 0
+    }
+  ]
+}

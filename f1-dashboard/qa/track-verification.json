@@ -1,0 +1,105 @@
+{
+  "provider": "OpenF1",
+  "verifiedAt": "2026-10-14T15:51:38.405Z",
+  "checks": [
+    {
+      "round": 1,
+      "circuit": "Albert Park Grand Prix Circuit",
+      "reference": {
+        "season": "2026",
+        "session": "Qualifying",
+        "sessionKey": 11230,
+        "driver": {
+          "number": 63,
+          "name": "George RUSSELL"
+        },
+        "lap": 21,
+        "duration": 78.518
+      },
+      "sectors": [
+        {
+          "number": 1,
+          "time": 27.498,
+          "points": 110
+        },
+        {
+          "number": 2,
+          "time": 17.284,
+          "points": 64
+        },
+        {
+          "number": 3,
+          "time": 33.736,
+          "points": 124
+        }
+      ],
+      "stale": false
+    },
+    {
+      "round": 2,
+      "circuit": "Shanghai International Circuit",
+      "reference": {
+        "season": "2026",
+        "session": "Qualifying",
+        "sessionKey": 11241,
+        "driver": {
+          "number": 12,
+          "name": "Kimi ANTONELLI"
+        },
+        "lap": 14,
+        "duration": 92.064
+      },
+      "sectors": [
+        {
+          "number": 1,
+          "time": 24.013,
+          "points": 96
+        },
+        {
+          "number": 2,
+          "time": 27.664,
+          "points": 106
+        },
+        {
+          "number": 3,
+          "time": 40.387,
+          "points": 158
+        }
+      ],
+      "stale": false
+    },
+    {
+      "round": 21,
+      "circuit": "Las Vegas Strip Street Circuit",
+      "reference": {
+        "season": "2025",
+        "session": "Qualifying",
+        "sessionKey": 9854,
+        "driver": {
+          "number": 4,
+          "name": "Lando NORRIS"
+        },
+        "lap": 24,
+        "duration": 107.934
+      },
+      "sectors": [
+        {
+          "number": 1,
+          "time": 30.43,
+          "points": 122
+        },
+        {
+          "number": 2,
+          "time": 36.842,
+          "points": 146
+        },
+        {
+          "number": 3,
+          "time": 40.662,
+          "points": 154
+        }
+      ],
+      "stale": false
+    }
+  ]
+}

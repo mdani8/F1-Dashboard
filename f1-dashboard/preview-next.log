@@ -1,0 +1,19 @@
+
+> f1-championship-dashboard@1.0.0 start
+> npm run build && node server.mjs
+
+
+> f1-championship-dashboard@1.0.0 build
+> vite build
+
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 440 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.64 kB │ gzip:   0.39 kB
+dist/assets/index-B0K6ysSt.css   23.32 kB │ gzip:   5.77 kB
+dist/assets/index-1kJxvAKB.js   418.00 kB │ gzip: 132.19 kB
+
+✓ built in 209ms
+Local: http://127.0.0.1:5173

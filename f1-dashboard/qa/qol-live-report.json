@@ -1,0 +1,61 @@
+{
+  "realData": true,
+  "tracks": [
+    {
+      "round": 11,
+      "circuit": "Hungaroring",
+      "reference": {
+        "season": "2026",
+        "session": "Qualifying",
+        "sessionKey": 11338,
+        "driver": {
+          "number": 1,
+          "name": "Lando NORRIS"
+        },
+        "lap": 15,
+        "duration": 77.207
+      },
+      "orientation": {
+        "northUp": true,
+        "rotation": -2.477,
+        "fitError": 0.0323,
+        "source": "F1 Circuits",
+        "geographicId": "hu-1986"
+      }
+    },
+    {
+      "round": 10,
+      "circuit": "Circuit de Spa-Francorchamps",
+      "reference": {
+        "season": "2026",
+        "session": "Qualifying",
+        "sessionKey": 11330,
+        "driver": {
+          "number": 12,
+          "name": "Kimi ANTONELLI"
+        },
+        "lap": 14,
+        "duration": 104.361
+      },
+      "orientation": {
+        "northUp": true,
+        "rotation": 2.452,
+        "fitError": 0.0098,
+        "source": "F1 Circuits",
+        "geographicId": "be-1925"
+      }
+    }
+  ],
+  "checks": [
+    "real session changes preserve scroll, focus and highlighted track sector",
+    "published lap records support clean filtering and fastest markers; favourites survive driver selection",
+    "real mobile lap controls and north-oriented map fit the viewport",
+    "Hungaroring and Spa align to geographic north with real published reference laps"
+  ],
+  "analysis": {
+    "driver": "1",
+    "recordedLaps": 16,
+    "cleanLaps": 10
+  },
+  "runtimeErrors": []
+}

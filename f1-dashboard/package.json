@@ -1,0 +1,18 @@
+{
+  "name": "f1-championship-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npm run build && node server.mjs",
+    "build": "vite build",
+    "test": "node --test",
+    "test:browser": "npm run build && node qa/browser.mjs",
+    "test:animations": "npm run build && node qa/animations.mjs",
+    "test:qol": "npm run build && node qa/qol.mjs",
+    "test:providers": "node qa/live.mjs"
+  },
+  "engines": { "node": "^20.19.0 || >=22.12.0" },
+  "dependencies": { "react": "19.3.0", "react-dom": "19.3.0", "motion": "14.2.0" },
+  "devDependencies": { "vite": "8.3.4", "@vitejs/plugin-react": "6.1.2" }
+}
