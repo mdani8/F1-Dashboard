@@ -116,7 +116,7 @@ export function createResultsService({ upstream = createUpstream(), now = Date.n
     const list = sessions(race).map(session => {
       const matches = meetingSessions.filter(row => openSlug(row.session_name) === session.slug);
       const matched = matches.length === 1 ? matches[0] : null;
-      return {...session, start:timestamp(session) ?? (matched ? number(Date.parse(matched.date_start)) : null), end:matched ? number(Date.parse(matched.date_end)) : null, sessionKey:Number.isInteger(matched?.session_key) ? matched.session_key : null, cancelled:matched?.is_cancelled === true};
+      return {...session, start:timestamp(session) ?? (matched ? number(Date.parse(matched.date_start)) : null), end:matched ? number(Date.parse(matched.date_end)) : null, sessionKey:Number.isInteger(matched?.session_key) ? matched.session_key : null, cancelled:matched?.is_cancelled === true, cancellationKnown:typeof matched?.is_cancelled === 'boolean' && !timing.stale};
     });
     return {season:String(season),round:String(round),name:race.raceName,circuitId:race.Circuit.circuitId,circuit:race.Circuit.circuitName,location:race.Circuit.Location?.locality || null,country:race.Circuit.Location?.country || null,date:race.date,time:race.time || null,sessions:list,meetingKey,...pollingWindow(race,list),metadata:{calendar:{source:'Jolpica F1',at:raceResult.at,stale:raceResult.stale,message:raceResult.message || null},timing:{source:'OpenF1',at:timing.at,stale:timing.stale,message:timing.message || (meetingKey === null ? 'Matching timing sessions are not available.' : null)}}};
   }
@@ -126,6 +126,35 @@ export function createResultsService({ upstream = createUpstream(), now = Date.n
     if (!session) throw new ProviderError('This session is not part of the weekend.', 404);
     return {weekend,session,options:{ttl:resultTTL(weekend,now()),force}};
   }
+  async function classification(weekend,session,roster,options) {
+    const {season,round} = weekend, {slug} = session;
+    if (['race','sprint','qualifying'].includes(slug)) {
+      const endpoint = slug === 'qualifying' ? 'qualifying' : slug === 'sprint' ? 'sprint' : 'results';
+      const field = slug === 'qualifying' ? 'QualifyingResults' : slug === 'sprint' ? 'SprintResults' : 'Results';
+      return section('jolpica', `${season}/${round}/${endpoint}/?format=json&limit=100`, session, data => normalizeJolpica(data.MRData.RaceTable.Races.find(row => String(row.round) === String(round))?.[field] || [],roster,slug), {...options,validate:data => {
+        validRaces(season)(data);
+        const race = data.MRData.RaceTable.Races.find(row => String(row.round) === String(round));
+        if (race && (!Array.isArray(race[field]) || race[field].some(row => !row.Driver || !row.Constructor))) throw new Error('Invalid classification response.');
+      }});
+    }
+    return session.sessionKey === null ? empty('OpenF1',session,weekend.metadata.timing.message) : section('openf1',`session_result?session_key=${session.sessionKey}`,session,data => normalizeOpenResults(data,roster,slug),{...options,validate:validTiming});
+  }
+  // RSS needs classifications only. Jolpica already supplies names and teams;
+  // OpenF1 needs its roster, but neither path loads pits, stints, laps or maps.
+  async function getClassification(weekend,slug) {
+    const session = weekend.sessions.find(item => item.slug === slug);
+    if (!session) throw new ProviderError('This session is not part of the weekend.',404);
+    const source = ['race','sprint','qualifying'].includes(slug) ? 'Jolpica F1' : 'OpenF1';
+    if (session.cancelled || empty(source,session).status === 'scheduled') return empty(source,session);
+    const options = {ttl:resultTTL(weekend,now())};
+    let roster = [];
+    if (source === 'OpenF1' && session.sessionKey !== null) {
+      const drivers = await section('openf1',`drivers?session_key=${session.sessionKey}`,session,data => data,{...options,validate:validTiming});
+      if (drivers.status !== 'available' || drivers.stale) return {...drivers,data:[]};
+      roster = drivers.data;
+    }
+    return classification(weekend,session,roster,options);
+  }
   async function getSession(season, round, slug, force = false) {
     const {weekend,session,options} = await context(season, round, slug, force);
     const source = ['race','sprint','qualifying'].includes(slug) ? 'Jolpica F1' : 'OpenF1';
@@ -133,21 +162,7 @@ export function createResultsService({ upstream = createUpstream(), now = Date.n
     const mappingMessage = weekend.metadata.timing.message || 'Matching timing sessions are not available.';
     const drivers = session.sessionKey === null ? empty('OpenF1',session,mappingMessage) : await section('openf1', `drivers?session_key=${session.sessionKey}`, session, data => data, {...options,validate:validTiming});
     const roster = drivers.data;
-    const requests = [];
-    if (source === 'Jolpica F1') {
-      const endpoint = slug === 'qualifying' ? 'qualifying' : slug === 'sprint' ? 'sprint' : 'results';
-      const field = slug === 'qualifying' ? 'QualifyingResults' : slug === 'sprint' ? 'SprintResults' : 'Results';
-      requests.push(section('jolpica', `${season}/${round}/${endpoint}/?format=json&limit=100`, session, data => {
-        const race = data.MRData.RaceTable.Races.find(row => String(row.round) === String(round));
-        const rows = race?.[field] || [];
-        if (!Array.isArray(rows)) throw new Error('Invalid results response.');
-        return normalizeJolpica(rows,roster,slug);
-      }, {...options,validate:data => {
-        validRaces(season)(data);
-        const race = data.MRData.RaceTable.Races.find(row => String(row.round) === String(round));
-        if (race && (!Array.isArray(race[field]) || race[field].some(row => !row.Driver || !row.Constructor))) throw new Error('Invalid classification response.');
-      }}));
-    } else requests.push(session.sessionKey === null ? empty(source,session,mappingMessage) : section('openf1', `session_result?session_key=${session.sessionKey}`, session, data => normalizeOpenResults(data,roster,slug), {...options,validate:validTiming}));
+    const requests = [classification(weekend,session,roster,options)];
     for (const [endpoint,normalize] of [['pit',normalizePits],['stints',normalizeStints]]) {
       requests.push(session.sessionKey === null ? empty('OpenF1',session,mappingMessage) : section('openf1', `${endpoint}?session_key=${session.sessionKey}`, session, data => normalize(data,roster), {...options,validate:validTiming}));
     }
@@ -175,5 +190,5 @@ export function createResultsService({ upstream = createUpstream(), now = Date.n
     return upstream.load('jolpica',route + '?format=json&limit=100',{force,validate:data => {if (!data?.MRData) throw new Error('Invalid provider response.');}});
   }
   const {getTrack} = createTrackService({upstream,getWeekend,now});
-  return {getWeekend,getSession,getLaps,getJolpica,getTrack};
+  return {getWeekend,getSession,getLaps,getJolpica,getTrack,getClassification};
 }

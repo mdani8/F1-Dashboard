@@ -1,0 +1,9 @@
+services:
+  gridline:
+    networks:
+      - default
+      - proxy
+networks:
+  proxy:
+    external: true
+    name: ${PROXY_NETWORK:?Set PROXY_NETWORK to the existing reverse-proxy Docker network}

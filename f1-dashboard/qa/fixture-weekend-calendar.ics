@@ -6,57 +6,57 @@ METHOD:PUBLISH
 X-WR-CALNAME:Australian Grand Prix 2026
 BEGIN:VEVENT
 UID:gridline-2026-1-practice-1@gridline.local
-DTSTAMP:20261014T165438Z
+DTSTAMP:20261014T220348Z
 DTSTART:20260306T013000Z
 DTEND:20260306T023000Z
 SUMMARY:Australian Grand Prix — Practice 1
 LOCATION:Albert Park Grand Prix Circuit\, Melbourne\, Australia
 DESCRIPTION:Gridline · Published Formula 1 schedule.
-URL:http://127.0.0.1:63789/#/weekend/2026/1?session=practice-1
+URL:http://127.0.0.1:63362/#/weekend/2026/1?session=practice-1
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:gridline-2026-1-practice-2@gridline.local
-DTSTAMP:20261014T165438Z
+DTSTAMP:20261014T220348Z
 DTSTART:20260306T050000Z
 DTEND:20260306T060000Z
 SUMMARY:Australian Grand Prix — Practice 2
 LOCATION:Albert Park Grand Prix Circuit\, Melbourne\, Australia
 DESCRIPTION:Gridline · Published Formula 1 schedule.
-URL:http://127.0.0.1:63789/#/weekend/2026/1?session=practice-2
+URL:http://127.0.0.1:63362/#/weekend/2026/1?session=practice-2
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:gridline-2026-1-practice-3@gridline.local
-DTSTAMP:20261014T165438Z
+DTSTAMP:20261014T220348Z
 DTSTART:20260307T013000Z
 DTEND:20260307T023000Z
 SUMMARY:Australian Grand Prix — Practice 3
 LOCATION:Albert Park Grand Prix Circuit\, Melbourne\, Australia
 DESCRIPTION:Gridline · Published Formula 1 schedule.
-URL:http://127.0.0.1:63789/#/weekend/2026/1?session=practice-3
+URL:http://127.0.0.1:63362/#/weekend/2026/1?session=practice-3
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:gridline-2026-1-qualifying@gridline.local
-DTSTAMP:20261014T165438Z
+DTSTAMP:20261014T220348Z
 DTSTART:20260307T050000Z
 DTEND:20260307T060000Z
 SUMMARY:Australian Grand Prix — Qualifying
 LOCATION:Albert Park Grand Prix Circuit\, Melbourne\, Australia
 DESCRIPTION:Gridline · Published Formula 1 schedule.
-URL:http://127.0.0.1:63789/#/weekend/2026/1?session=qualifying
+URL:http://127.0.0.1:63362/#/weekend/2026/1?session=qualifying
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:gridline-2026-1-race@gridline.local
-DTSTAMP:20261014T165438Z
+DTSTAMP:20261014T220348Z
 DTSTART:20260308T040000Z
 DTEND:20260308T050000Z
 SUMMARY:Australian Grand Prix — Race
 LOCATION:Albert Park Grand Prix Circuit\, Melbourne\, Australia
 DESCRIPTION:Gridline · Published Formula 1 schedule.
-URL:http://127.0.0.1:63789/#/weekend/2026/1?session=race
+URL:http://127.0.0.1:63362/#/weekend/2026/1?session=race
 STATUS:CONFIRMED
 END:VEVENT
 END:VCALENDAR

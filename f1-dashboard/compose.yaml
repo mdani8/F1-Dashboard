@@ -1,0 +1,33 @@
+name: gridline
+services:
+  gridline:
+    build: .
+    image: gridline:local
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 30s
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: '5173'
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://127.0.0.1:5173}
+      DATA_DIR: /data
+      TZ: UTC
+    ports:
+      - '127.0.0.1:${HOST_PORT:-5173}:5173'
+    volumes:
+      - feed_data:/data
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'
+volumes:
+  feed_data:

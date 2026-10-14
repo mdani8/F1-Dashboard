@@ -1,0 +1,14 @@
+node_modules
+dist
+.git
+.codex
+.agents
+.env
+.env.*
+!.env.example
+.gridline-data
+**/*.log
+rss-state-backup*.json
+qa/**
+!qa/fixtures.mjs
+README.md

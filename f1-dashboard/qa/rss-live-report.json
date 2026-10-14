@@ -1,0 +1,81 @@
+{
+  "health": {
+    "status": "ok",
+    "feeds": {
+      "state": "ready",
+      "items": 7,
+      "lastAttempt": 1792016008547,
+      "lastSuccessfulRefresh": 1792016012677,
+      "message": null
+    }
+  },
+  "feedStatus": 200,
+  "xmlErrors": 0,
+  "items": [
+    {
+      "title": "Results: Bahrain Grand Prix in Malaysia — Qualifying",
+      "guid": "urn:gridline:results:2026:16:qualifying:v1",
+      "link": "http://127.0.0.1:5173/#/weekend/2026/16?session=qualifying",
+      "rows": 22,
+      "source": "Jolpica F1"
+    },
+    {
+      "title": "Results: Bahrain Grand Prix in Malaysia — Race",
+      "guid": "urn:gridline:results:2026:16:race:v1",
+      "link": "http://127.0.0.1:5173/#/weekend/2026/16?session=race",
+      "rows": 22,
+      "source": "Jolpica F1"
+    },
+    {
+      "title": "Results: Singapore Grand Prix — Practice 1",
+      "guid": "urn:gridline:results:2026:17:practice-1:v1",
+      "link": "http://127.0.0.1:5173/#/weekend/2026/17?session=practice-1",
+      "rows": 22,
+      "source": "OpenF1"
+    },
+    {
+      "title": "Results: Singapore Grand Prix — Sprint qualifying",
+      "guid": "urn:gridline:results:2026:17:sprint-qualifying:v1",
+      "link": "http://127.0.0.1:5173/#/weekend/2026/17?session=sprint-qualifying",
+      "rows": 22,
+      "source": "OpenF1"
+    },
+    {
+      "title": "Results: Singapore Grand Prix — Sprint",
+      "guid": "urn:gridline:results:2026:17:sprint:v1",
+      "link": "http://127.0.0.1:5173/#/weekend/2026/17?session=sprint",
+      "rows": 22,
+      "source": "Jolpica F1"
+    },
+    {
+      "title": "Results: Singapore Grand Prix — Qualifying",
+      "guid": "urn:gridline:results:2026:17:qualifying:v1",
+      "link": "http://127.0.0.1:5173/#/weekend/2026/17?session=qualifying",
+      "rows": 22,
+      "source": "Jolpica F1"
+    },
+    {
+      "title": "Results: Singapore Grand Prix — Race",
+      "guid": "urn:gridline:results:2026:17:race:v1",
+      "link": "http://127.0.0.1:5173/#/weekend/2026/17?session=race",
+      "rows": 22,
+      "source": "Jolpica F1"
+    }
+  ],
+  "race": {
+    "season": "2026",
+    "round": "16",
+    "rows": 22
+  },
+  "hungaroring": {
+    "driver": 44,
+    "results": 22,
+    "cleanLaps": 64
+  },
+  "checks": [
+    "running production container serves valid populated RSS with full real classifications from both providers",
+    "RSS race classification count agrees with the existing real-data session API",
+    "Docker serves the real Hungaroring driver view, north map, lap filters and mobile subscriptions without overflow"
+  ],
+  "runtimeErrors": []
+}

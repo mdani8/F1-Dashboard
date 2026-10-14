@@ -10,6 +10,8 @@
     "test:browser": "npm run build && node qa/browser.mjs",
     "test:animations": "npm run build && node qa/animations.mjs",
     "test:qol": "npm run build && node qa/qol.mjs",
+    "test:rss": "npm run build && node qa/feeds.mjs",
+    "test:docker": "node qa/docker.mjs",
     "test:providers": "node qa/live.mjs"
   },
   "engines": { "node": "^20.19.0 || >=22.12.0" },

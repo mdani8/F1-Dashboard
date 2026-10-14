@@ -4,9 +4,9 @@ Snapshot: 14 October 2026 (Europe/Brussels).
 
 ## Current application
 
-The workspace contains **Gridline — F1 Championship** in `f1-dashboard/`: a responsive Formula 1 dashboard with standings, favourite drivers/teams, session countdowns, calendar exports, expandable schedules, geographic north-oriented track maps, sticky session tabs/table headers, and results, pits, tires and filterable driver lap analysis with fastest-lap markers.
+The workspace contains **Gridline — F1 Championship** in `f1-dashboard/`: a responsive Formula 1 dashboard with standings, favourites, countdowns, calendar exports, north-oriented track maps, sticky controls, session results/strategy/lap analysis, and public RSS feeds for results, 24-hour reminders and corrections. The complete application has a production Docker Compose setup.
 
-The interface uses React 19 and Motion 14, preserving the existing dark design and data behavior. Vite 8 builds the frontend into `dist/`; the existing Node HTTP server serves that output and aggregates Jolpica/OpenF1 data through read-only APIs, shared caches, and rate limits. `npm start` builds and serves the site on `127.0.0.1:5173`. There is no database, account system, or deployment configuration. The workspace is not a Git repository.
+The interface uses React 19 and Motion 14. Vite 8 builds into `dist/`; Node serves the assets and aggregates Jolpica/OpenF1 through read-only APIs, shared caches and rate limits. The pinned Node 24 production image builds/tests the frontend and runs as a non-root user with a read-only application filesystem. Docker Compose persists RSS history in a named volume and supports an existing reverse proxy's external network. Direct `npm start` remains available. There is no database/account system. The workspace is not a Git repository.
 
 ## File map
 
@@ -14,8 +14,13 @@ The interface uses React 19 and Motion 14, preserving the existing dark design a
 | --- | --- |
 | `f1-dashboard/package.json`, `package-lock.json` | Pinned React, React DOM, Motion, Vite and React plugin dependencies; build/start/test scripts; Node 20.19+ or 22.12+ requirement. |
 | `f1-dashboard/vite.config.js`, `index.html` | React build configuration and HTML entry; static output goes to `dist/`. |
-| `f1-dashboard/README.md` | Setup, dashboard behavior, data-provider notes, and testing instructions. |
-| `f1-dashboard/server.mjs` | Local server bound to `127.0.0.1:5173`; static files, restricted Jolpica proxy, weekend/session/lap APIs, and request validation. |
+| `f1-dashboard/README.md` | Detailed Windows/Linux Docker Compose quickstart, public proxy setup, configuration, RSS subscriptions, maintenance, backup/restore, troubleshooting and local development. |
+| `f1-dashboard/Dockerfile`, `.dockerignore` | Pinned multi-stage Node 24 production build, test stage and runtime content. |
+| `f1-dashboard/compose.yaml`, `compose.proxy.yaml`, `.env.example` | Localhost-published application, RSS named volume and optional existing proxy network configuration. |
+| `f1-dashboard/server.mjs`, `runtime-config.mjs` | Configurable HTTP entry, existing APIs, RSS/health routes, startup validation and graceful shutdown. |
+| `f1-dashboard/feed-service.mjs` | Independent five-minute collector for reminders, backfill, material corrections and stale/partial failure handling. |
+| `f1-dashboard/feed-model.mjs`, `feed-store.mjs` | RSS 2.0 rendering, classification signatures, stable revisions and atomic validated JSON state. |
+| `f1-dashboard/scripts/healthcheck.mjs`, `scripts/feed-state.mjs` | Provider-independent container health probe and safe journal restore helper. |
 | `f1-dashboard/upstream.mjs` | Shared provider caches, request deduplication, rate limiting, Retry-After, backoff, and stale fallbacks. |
 | `f1-dashboard/results-service.mjs` | Weekend/driver identity matching and normalization of classifications, pit stops, tire stints, and laps. |
 | `f1-dashboard/src/main.jsx`, `src/App.jsx` | React entry, persistent shell, hash navigation, page transitions, and dashboard selections. |
@@ -41,17 +46,21 @@ The interface uses React 19 and Motion 14, preserving the existing dark design a
 | `f1-dashboard/test/results.test.js` | Fifteen fixture-based tests covering results, identities, cache/failure behavior, and rate limiting. |
 | `f1-dashboard/test/track.test.js` | Six tests for sector boundaries, incomplete positions, reference selection, independent failures and prior-season maps. |
 | `f1-dashboard/test/orientation.test.js`, `test/qol.test.js` | Eight tests for geographic rotation, cache invalidation, preferences, countdowns, calendar export and lap filtering. |
+| `f1-dashboard/test/feeds.test.js` | Seventeen RSS/runtime tests for publication, reminders, corrections, chronological backfill, caching, persistence, shutdown and configuration. |
 | `f1-dashboard/qa/fixtures.mjs` | Deterministic normal/sprint provider fixtures for unit and browser checks. |
 | `f1-dashboard/qa/browser.mjs` | Playwright checks for navigation, keyboard access, mobile layouts, refresh, stale states, and outstanding requests. Uses local Codex Playwright and Chrome paths. |
 | `f1-dashboard/qa/animations.mjs` | Real-timer checks for interrupted transitions, tire reveals, changed cells, stable DOM, reduced motion, and review video capture. |
 | `f1-dashboard/qa/qol.mjs` | Seven fixture browser check groups for countdowns, favourites, calendar downloads, sticky controls, delayed loading, lap filtering and mobile navigation. |
 | `f1-dashboard/qa/qol-live.mjs` | Running-preview checks with real Hungaroring/Spa maps, scroll/focus preservation and mobile lap analysis. |
+| `f1-dashboard/qa/feeds.mjs` | Browser XML parsing, escaped classification content, session links, discovery and desktop/mobile subscription checks. |
+| `f1-dashboard/qa/rss-live.mjs` | Production-container verification with published RSS classifications from both providers and the real Hungaroring driver view. |
+| `f1-dashboard/qa/docker.mjs`, `qa/compose.fixtures.yaml`, `qa/container-fixture.mjs` | Isolated disposable Docker tests for Linux runtime, shared proxy network, persistence and backup/restore. |
 | `f1-dashboard/qa/live.mjs` | Read-only verification of six published sessions from completed normal and sprint weekends. |
 | `f1-dashboard/qa/preview.mjs` | Browser check against the running React preview, Australian race, Chinese sprint qualifying, and current dashboard data. |
 | `f1-dashboard/qa/*.png` | Dashboard, results, and preview screenshots at desktop/mobile sizes. |
 | `f1-dashboard/qa/animations.webm` | Short animation recording for visual review. |
 | `f1-dashboard/qa/*-report.json`, `f1-dashboard/qa/live-verification.json` | Browser and provider verification summaries. |
-| `f1-dashboard/preview-next.log`, `preview-next-error.log` | Current background preview output/errors; earlier preview logs are retained. |
+| `f1-dashboard/preview*.log` | Retained historical Node preview logs. Current container logs use `docker compose logs gridline`. |
 
 ## Data and behavior
 
@@ -71,6 +80,9 @@ The interface uses React 19 and Motion 14, preserving the existing dark design a
 14. Stars save favourite drivers by code/name and teams by canonical identity under `gridline:favourites:v1`. Amber highlights apply across standings, results, pits and tires, survive reloads and synchronise browser tabs.
 15. Upcoming sessions show a local one-second countdown that pauses while hidden. Weekend exports include every published session in an `.ics` file, using UTC for timed events, all-day TBC events, stable identifiers, published end times and cancellation status.
 16. Lap analysis filters all/clean/pit/out records and keeps its filter while changing drivers. Fastest recorded clean laps, including ties, receive purple markers. Unknown or stale pit annotations are excluded from clean/fastest claims; classification remains the authority for official results.
+17. RSS routes `/feeds/all.xml`, `/feeds/results.xml` and `/feeds/upcoming.xml` serve the latest 100 publications each. The independent collector starts without a browser, runs every five minutes, seeds the latest two completed weekends and watches those plus the active weekend. Classification-only requests avoid unrelated timing/strategy data.
+18. Confirmed sessions get one reminder within 24 hours of their start; changed schedules/cancellations and classifications produce new labelled revisions. Retrieved timestamps/unchanged data do not publish items. The named volume stores stable identities, the latest 500 publications and current/previous-season identity state; failed upstream refreshes retain successful snapshots.
+19. `PUBLIC_BASE_URL` generates absolute RSS URLs and supports the public HTTPS origin. The production Compose service listens on all container interfaces at 5173 while publishing only host localhost. The optional override joins an existing proxy network and exposes service DNS `gridline:5173` to that proxy. `/healthz` reports app/feed state without treating provider outages as server failures.
 
 Read-only results interfaces: `/api/weekends/:season/:round`, `/api/weekends/:season/:round/track`, `/api/weekends/:season/:round/sessions/:slug`, and `/api/weekends/:season/:round/sessions/:slug/laps?driver=<number>`. Free published data is used; paid live timing is not configured.
 
@@ -78,7 +90,14 @@ Fresh F1 data requires internet access. Google Fonts supplies Barlow fonts, with
 
 ## Run and check
 
-When the preview is not already running, start it from the workspace root:
+For Docker, run from `f1-dashboard/` (copy `.env.example` to `.env` on first setup and set the public URL/network for a public server):
+
+```shell
+docker compose up -d --build --wait
+docker compose ps
+```
+
+For a direct Node preview instead:
 
 ```powershell
 Set-Location -LiteralPath '.\f1-dashboard'
@@ -95,15 +114,21 @@ npm test
 npm run test:browser
 npm run test:animations
 npm run test:qol
+npm run test:rss
+npm run test:docker
 npm run test:providers
 ```
 
 ## Verified state
 
 - Installed runtime: Node `v26.10.0`, npm `11.19.1`.
-- `npm start` successfully built and started the React background preview at the preview URL.
-- `npm test`: **37 passed, 0 failed**, retaining all 23 original tests and adding six track-map, three orientation and five quality-of-life tests.
-- The updated Belgian Grand Prix qualifying page is open in the Codex browser panel and retained for review.
+- The pinned production image builds successfully with Node `v24.22.0`; all 54 unit tests pass inside Linux and on the installed Windows Node runtime.
+- `npm test`: **54 passed, 0 failed**, retaining the previous 37 tests and adding seventeen RSS/runtime tests.
+- Existing 11 navigation, seven animation and seven quality-of-life browser groups pass after adding RSS, with no browser runtime errors.
+- Four RSS browser groups verify XML parsing, full/escaped content, shareable session links, discovery and desktop/mobile keyboard controls.
+- Five Docker groups verify the non-root/read-only Linux image, assets/APIs/feeds, a shared external proxy network, restart identity, and backup/restore/recreation. Disposable verification resources were removed after the tests; the production Compose project is separate.
+- The production Compose service is healthy at `http://127.0.0.1:5173`, using its persistent RSS volume. No public domain or external proxy configuration has been applied on this computer.
+- The real-data RSS check verified seven full 22-driver classifications from Jolpica/OpenF1, valid XML, stable unique identifiers and a race/API comparison. The Docker-served Hungaroring race returned 22 results and 64 clean laps for driver 44, with a north-oriented map and no mobile overflow or browser runtime errors. An initial provider cooldown was respected before the successful retry.
 - Browser checks cover all nine existing groups of navigation, mobile, refresh, visibility, stale-state, and late-response scenarios, plus sector/map persistence and independent map failure checks (11 groups), with no browser runtime errors.
 - Seven additional real-timer groups verify interrupted disclosures, actual tire reveals, rapid tab changes, dashboard state restoration, stable refreshes, changed-cell highlights, driver selection during loading, keyboard/mobile behavior, and reduced motion. Desktop/mobile screenshots and a short recording are saved in `qa/`.
 - Seven quality-of-life browser groups verify countdowns, saved favourites, actual calendar downloads, sticky headers, keyboard table scrolling, delayed session loading without jumps, lap filters, tied fastest markers and mobile controls. No runtime errors were reported.

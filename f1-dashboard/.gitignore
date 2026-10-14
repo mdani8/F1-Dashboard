@@ -2,3 +2,9 @@ node_modules/
 dist/
 preview.log
 preview-error.log
+preview-*.log
+.env
+.gridline-data/
+rss-state-backup*.json
+qa/docker-cli/
+qa/rss-state-backup*.json
