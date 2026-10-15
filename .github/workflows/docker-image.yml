@@ -100,6 +100,7 @@ jobs:
                 healthy=true
                 break
               fi
+              echo "Waiting for $platform health (attempt $attempt/30)."
               sleep 2
             done
             if [[ "$healthy" != true ]]; then
@@ -122,8 +123,8 @@ jobs:
           image="${image%:*}"
           {
             printf '## Published Gridline image\n\n'
-            printf 'Platforms: `linux/amd64`, `linux/arm64` (health checks passed).\n\n'
-            printf 'Digest: `%s`\n\n' "$IMAGE_DIGEST"
+            printf 'Platforms: linux/amd64, linux/arm64 (health checks passed).\n\n'
+            printf 'Digest: %s\n\n' "$IMAGE_DIGEST"
             printf '```shell\n'
             while IFS= read -r tag; do
               printf 'docker pull %s\n' "$tag"
