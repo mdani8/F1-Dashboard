@@ -79,20 +79,28 @@ jobs:
           image="${image%:*}"
           published="$image@$IMAGE_DIGEST"
 
-          docker buildx imagetools inspect --raw "$published" | jq -e '
+          manifest="$(docker buildx imagetools inspect --raw "$published")"
+          jq -e '
             any(.manifests[]; .platform.os == "linux" and .platform.architecture == "amd64") and
             any(.manifests[]; .platform.os == "linux" and .platform.architecture == "arm64")
-          '
+          ' <<< "$manifest"
 
           trap 'docker rm --force gridline-image-check >/dev/null 2>&1 || true' EXIT
           for platform in linux/amd64 linux/arm64; do
-            docker pull --platform "$platform" "$published"
+            # Distinct child digests also work with Docker's classic image store.
+            platform_digest="$(jq -er --arg architecture "${platform#linux/}" '
+              .manifests[] |
+              select(.platform.os == "linux" and .platform.architecture == $architecture) |
+              .digest
+            ' <<< "$manifest")"
+            platform_image="$image@$platform_digest"
+            docker pull --platform "$platform" "$platform_image"
             docker run --detach --pull=never --name gridline-image-check \
               --platform "$platform" --network none --read-only \
               --tmpfs /tmp:rw,size=16m,mode=1777 \
               --tmpfs /data:rw,size=16m,uid=1000,gid=1000 \
               --cap-drop ALL --security-opt no-new-privileges:true \
-              "$published"
+              "$platform_image"
 
             healthy=false
             for attempt in {1..30}; do
