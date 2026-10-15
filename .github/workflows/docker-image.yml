@@ -1,0 +1,133 @@
+name: Build and publish Docker image
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-publish:
+    name: Build, publish and verify
+    if: github.event_name != 'push' || !github.event.deleted
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4
+        with:
+          platforms: arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
+
+      - name: Generate image tags and labels
+        id: metadata
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
+        with:
+          images: ghcr.io/${{ github.repository }}
+          flavor: latest=false
+          tags: |
+            type=sha,format=long
+            type=ref,event=branch,prefix=branch-
+            type=ref,event=tag,prefix=tag-
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+          labels: |
+            org.opencontainers.image.title=Gridline
+            org.opencontainers.image.description=Formula 1 standings, weekend results, circuit maps and RSS feeds
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and publish production image
+        id: build
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
+        with:
+          context: ./f1-dashboard
+          file: ./f1-dashboard/Dockerfile
+          target: production
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+          cache-from: type=gha,scope=gridline-production,version=2
+          cache-to: type=gha,scope=gridline-production,version=2,mode=max
+
+      - name: Verify published manifest and container health
+        env:
+          IMAGE_TAGS: ${{ steps.metadata.outputs.tags }}
+          IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          image="${IMAGE_TAGS%%$'\n'*}"
+          image="${image%:*}"
+          published="$image@$IMAGE_DIGEST"
+
+          docker buildx imagetools inspect --raw "$published" | jq -e '
+            any(.manifests[]; .platform.os == "linux" and .platform.architecture == "amd64") and
+            any(.manifests[]; .platform.os == "linux" and .platform.architecture == "arm64")
+          '
+
+          trap 'docker rm --force gridline-image-check >/dev/null 2>&1 || true' EXIT
+          for platform in linux/amd64 linux/arm64; do
+            docker pull --platform "$platform" "$published"
+            docker run --detach --pull=never --name gridline-image-check \
+              --platform "$platform" --network none --read-only \
+              --tmpfs /tmp:rw,size=16m,mode=1777 \
+              --tmpfs /data:rw,size=16m,uid=1000,gid=1000 \
+              --cap-drop ALL --security-opt no-new-privileges:true \
+              "$published"
+
+            healthy=false
+            for attempt in {1..30}; do
+              if docker exec gridline-image-check node build/server/cli/healthcheck.js; then
+                healthy=true
+                break
+              fi
+              sleep 2
+            done
+            if [[ "$healthy" != true ]]; then
+              docker logs gridline-image-check
+              echo "Published $platform image failed its health check." >&2
+              exit 1
+            fi
+            echo "Verified $platform container health."
+            docker rm --force gridline-image-check
+          done
+
+      - name: Summarize published image
+        env:
+          IMAGE_TAGS: ${{ steps.metadata.outputs.tags }}
+          IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          image="${IMAGE_TAGS%%$'\n'*}"
+          image="${image%:*}"
+          {
+            printf '## Published Gridline image\n\n'
+            printf 'Platforms: `linux/amd64`, `linux/arm64` (health checks passed).\n\n'
+            printf 'Digest: `%s`\n\n' "$IMAGE_DIGEST"
+            printf '```shell\n'
+            while IFS= read -r tag; do
+              printf 'docker pull %s\n' "$tag"
+            done <<< "$IMAGE_TAGS"
+            printf 'docker pull %s@%s\n' "$image" "$IMAGE_DIGEST"
+            printf '```\n'
+          } >> "$GITHUB_STEP_SUMMARY"

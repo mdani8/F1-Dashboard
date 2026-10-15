@@ -263,6 +263,62 @@ A restored snapshot keeps its existing RSS identifiers. Readers do not receive d
 | Permission denied for a bind-mounted data directory | Prefer the provided named volume. A custom data directory must be writable by container UID/GID 1000.                                                              |
 | Source/environment changes are not visible          | Rebuild/recreate with `up -d --build --wait`; `restart` uses the existing image/configuration.                                                                     |
 
+## Images from GitHub Actions
+
+The repository's [Docker workflow](../.github/workflows/docker-image.yml) builds and publishes **`ghcr.io/mdani8/f1-dashboard`** on every branch or Git tag push. You can also run **Build and publish Docker image** manually from the repository's **Actions** tab. Deleting a branch or tag does not build an image.
+
+Each image includes **Linux AMD64 and ARM64** variants. Docker selects the matching architecture when pulling it. The workflow uses the existing Dockerfile's `production` target, including type checking, lint, formatting, unused-code analysis and all 54 regression tests. A failed build/check prevents publication. After publishing, it verifies the registry manifest and starts both variants with read-only filesystems and temporary data directories to check `/healthz`. These checks have networking disabled, so provider availability does not affect their result.
+
+| Image tag                   | Meaning                                                                                            |
+| --------------------------- | -------------------------------------------------------------------------------------------------- |
+| `sha-<full-commit-sha>`     | Image for a specific source commit; available after each successful build.                         |
+| `branch-<sanitized-branch>` | Most recently published build of that branch, such as `branch-main` or `branch-codex-new-feature`. |
+| `tag-<sanitized-git-tag>`   | Build associated with a Git tag, such as `tag-v1.0.0`.                                             |
+| `latest`                    | Updated only by successful builds from `main`, including manual runs on that branch.               |
+
+Automatic `latest` tagging is disabled for other branches and Git tags. Tags can move; use the digest shown in the workflow summary to select an exact image. The summary includes the published tags, digest and ready-to-copy pull commands. Source repository and commit labels are attached to the image.
+
+The workflow uses GitHub's built-in `GITHUB_TOKEN` with `contents: read` and `packages: write`; no Docker Hub account or additional registry secrets are needed. Actions are pinned to verified commit SHAs, and Docker layers use GitHub Actions caching. Each job has a 45-minute timeout. ARM64 builds and checks use QEMU and can take longer than native AMD64 builds. See [GitHub's publishing guide](https://docs.github.com/en/actions/tutorials/publish-packages/publish-docker-images) and [Docker's multi-platform guide](https://docs.docker.com/build/ci/github-actions/multi-platform/).
+
+### Registry access
+
+New GHCR packages are **private by default**, including packages built from public repositories. Publishing does not change the repository or package visibility. To allow anonymous pulls, open your GitHub profile's **Packages**, select **f1-dashboard**, and use **Package settings → Change visibility → Public**. Public visibility applies to the whole package, including images published from feature branches; keep the package private if those images should require authentication. See [GHCR access and visibility](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
+
+For a private package, sign in on each Docker host with a GitHub personal access token **(classic)** that has `read:packages` and an account authorized to read the package. Run this command and enter the token at the password prompt; do not put it in Compose, `.env`, or the command itself:
+
+```shell
+docker login ghcr.io --username YOUR_GITHUB_USERNAME
+docker pull ghcr.io/mdani8/f1-dashboard:latest
+```
+
+Public packages can be pulled without signing in. Publishing from Actions continues to use `GITHUB_TOKEN`, rather than a personal access token.
+
+### Run a published image with the existing Compose setup
+
+Configure `.env` and the reverse proxy as described above. If updating an existing installation, follow the RSS backup procedure first and optionally tag the current `gridline:local` image as `gridline:rollback`. From `f1-dashboard/`:
+
+```shell
+docker pull ghcr.io/mdani8/f1-dashboard:latest
+docker image tag ghcr.io/mdani8/f1-dashboard:latest gridline:local
+docker compose up -d --no-build --force-recreate --wait
+docker compose exec gridline node build/server/cli/healthcheck.js
+```
+
+This retains the Compose service, runtime protections and `gridline_feed_data` volume. For a proxy deployment, keep using `-f compose.yaml -f compose.proxy.yaml` with each Compose command. Repeat the pull/tag/recreate steps to update, or substitute `sha-<full-commit-sha>` for `latest` to select a commit. To select an exact digest, pull and tag `ghcr.io/mdani8/f1-dashboard@sha256:<digest>` instead.
+
+Keep `--no-build` when using the downloaded image: `--build` rebuilds the local source. The workflow publishes images without automatically restarting or deploying any installation. Existing local builds and rollback commands continue to work.
+
+### Workflow troubleshooting
+
+| Symptom                                       | Check / fix                                                                                                                                                                   |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| No workflow run after a push                  | The workflow must be at the repository root under `.github/workflows/`, and Actions must be enabled in repository settings. Branch/tag deletions are intentionally skipped.   |
+| Workflow cannot publish to GHCR               | Check the failed step and repository/organization Actions policy. An existing package must grant this repository write access under its package settings.                     |
+| Local pull returns `denied` or `unauthorized` | Authenticate with a classic token containing `read:packages`, confirm package access, or explicitly make the package public. Publishing successfully does not make it public. |
+| A tag is missing                              | Check the run for that push. Git tags use the `tag-` prefix; only `main` publishes `latest`. Build/check failures prevent publication.                                        |
+| Image was published but the run is red        | Read the manifest/container verification step. Publication happens before these checks, so use the previous known-good commit tag or digest until the failure is resolved.    |
+| A job reaches its timeout                     | Inspect the failing stage. The first multi-platform build and ARM64 emulation are slower; later builds reuse cached layers.                                                   |
+
 ## RSS subscriptions
 
 Copy one of these URLs into your RSS reader, replacing the origin with your public domain or configured local port:
